@@ -1,5 +1,6 @@
-package pingpong.v1.vo;
+package pingpong.vo;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -10,6 +11,14 @@ public class PingpongVo {
 	private Integer number;
 
 	private Set<PingpongEnum> set = new HashSet<>();
+
+	public PingpongVo() {
+	}
+
+	public PingpongVo(Integer number, PingpongEnum... p) {
+		this.number = number;
+		this.set.addAll(Arrays.asList(p));
+	}
 
 	public Integer getNumber() {
 		return number;
@@ -34,6 +43,11 @@ public class PingpongVo {
 			s.append(" ").append(p);
 		}
 		return s.toString();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		return this.toString().equals(((PingpongVo) obj).toString());
 	}
 
 }
