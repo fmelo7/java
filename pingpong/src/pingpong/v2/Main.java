@@ -1,13 +1,13 @@
 package pingpong.v2;
 
-import static pingpong.v1.PingpongEnum.PING;
-import static pingpong.v1.PingpongEnum.PONG;
+import static pingpong.model.PingpongEnum.PING;
+import static pingpong.model.PingpongEnum.PONG;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import pingpong.v1.PingpongEnum;
-import pingpong.vo.PingpongVo;
+import pingpong.model.PingpongEnum;
+import pingpong.model.PingpongVo;
 
 public class Main {
 

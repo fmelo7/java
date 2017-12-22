@@ -3,7 +3,8 @@ package pingpong.v1;
 import java.util.ArrayList;
 import java.util.List;
 
-import pingpong.vo.PingpongVo;
+import pingpong.model.PingpongEnum;
+import pingpong.model.PingpongVo;
 
 public class Main {
 

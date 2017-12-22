@@ -1,10 +1,8 @@
-package pingpong.vo;
+package pingpong.model;
 
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
-
-import pingpong.v1.PingpongEnum;
 
 public class PingpongVo {
 
