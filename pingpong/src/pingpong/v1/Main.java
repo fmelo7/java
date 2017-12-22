@@ -1,9 +1,9 @@
-package pingpong;
+package pingpong.v1;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import pingpong.vo.PingpongVo;
+import pingpong.v1.vo.PingpongVo;
 
 public class Main {
 

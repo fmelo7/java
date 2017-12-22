@@ -1,9 +1,9 @@
-package pingpong.vo;
+package pingpong.v1.vo;
 
 import java.util.HashSet;
 import java.util.Set;
 
-import pingpong.PingpongEnum;
+import pingpong.v1.PingpongEnum;
 
 public class PingpongVo {
 
