@@ -33,7 +33,7 @@ public class Main {
 
 	private static List<PingpongVo> pingpong(List<Integer> list) {
 		return list.stream()//
-				.map(createVo)//
+				.map(number -> createVo(number))//
 				.collect(Collectors.toList());
 	}
 
@@ -43,13 +43,6 @@ public class Main {
 				.map(fill)//
 				.collect(Collectors.<Integer>toList());
 	}
-
-	private static Function<Integer, PingpongVo> createVo = new Function<Integer, PingpongVo>() {
-		@Override
-		public PingpongVo apply(Integer number) {
-			return createVo(number);
-		}
-	};
 
 	private static Function<Integer, Integer> fill = new Function<Integer, Integer>() {
 		private int i = 0;
