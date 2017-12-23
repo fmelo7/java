@@ -4,7 +4,6 @@ import static pingpong.model.PingpongEnum.PING;
 import static pingpong.model.PingpongEnum.PONG;
 import static pingpong.model.PingpongEnum.createVo;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,7 +18,7 @@ public class Main {
 
 		// arrange
 		Integer number = 100;
-		List<Integer> list = initialize(number);
+		List<Integer> list = Functions.initialize(number);
 
 		// act
 		List<PingpongVo> list2 = pingpong(list);
@@ -35,13 +34,6 @@ public class Main {
 		return list.stream()//
 				.map(number -> createVo(number))//
 				.collect(Collectors.toList());
-	}
-
-	private static List<Integer> initialize(Integer number) {
-		return Arrays//
-				.stream(new Integer[number])//
-				.map(Functions.fill)//
-				.collect(Collectors.<Integer>toList());
 	}
 
 }
