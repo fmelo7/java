@@ -6,12 +6,12 @@ import static pingpong.model.PingpongEnum.createVo;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.junit.Assert;
 
 import pingpong.model.PingpongVo;
+import pingpong.util.Functions;
 
 public class Main {
 
@@ -40,17 +40,8 @@ public class Main {
 	private static List<Integer> initialize(Integer number) {
 		return Arrays//
 				.stream(new Integer[number])//
-				.map(fill)//
+				.map(Functions.fill)//
 				.collect(Collectors.<Integer>toList());
 	}
-
-	private static Function<Integer, Integer> fill = new Function<Integer, Integer>() {
-		private int i = 0;
-
-		@Override
-		public Integer apply(Integer n) {
-			return ++i;
-		}
-	};
 
 }
