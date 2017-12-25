@@ -1,0 +1,35 @@
+<h3 ng-bind="vm.title"></h3>
+<p ng-bind="vm.description"></p>
+<div class="row">
+	<div class="col-sm-3" xstyle="background-color: yellow;">
+		<a class="btn btn-default" data-toggle="collapse"
+			data-target="#list-group-collapse"><span
+			class="glyphicon glyphicon-menu-hamburger"></span></a>
+		<ul id="list-group-collapse" class="list-group collapse">
+			<li class="list-group-item" ng-if="activities"
+				ng-repeat="item in activities"><a href=""
+				class="btn-sm btn-link" ng-class="{ disabled: isActive(item)}"
+				ng-click="showActivity(item)"><span
+					ng-bind="item.filename | extensionSplit"></span></a></li>
+		</ul>
+	</div>
+	<div class="col-sm-9" xstyle="background-color: pink;">
+		<div class="row" ng-if="vm.selected.filename">
+			<div>filename: {{vm.selected.filename}}</div>
+			<div>friendlyName: {{vm.selected.dataUserProfile.friendlyName}}</div>
+			<div>gender: {{vm.selected.dataUserProfile.gender}}</div>
+			<div>age: {{vm.selected.dataUserProfile.age}}</div>
+			<div>weight: {{vm.selected.dataUserProfile.weight}}</div>
+		</div>
+		<br />
+		<div class="row">
+			<div class="chart-container">
+				<canvas id="line" class="chart chart-line ng-isolate-scope"
+					chart-data="data" chart-labels="labels" chart-click="onClick"
+					chart-hover="onHover" chart-series="series" chart-options="options"
+					chart-y-axes="multiAxis"></canvas>
+			</div>
+		</div>
+	</div>
+</div>
+<br />

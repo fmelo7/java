@@ -1,0 +1,6 @@
+/target/
+/bower_components/
+/node_modules/
+/.tmp/
+/.sass-cache/
+/node/
