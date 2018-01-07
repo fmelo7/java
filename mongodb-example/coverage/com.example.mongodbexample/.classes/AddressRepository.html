@@ -39,272 +39,292 @@
 <div class="sourceCode"><i>1</i>&nbsp;package com.example.mongodbexample;
 <i>2</i>&nbsp;
 <i>3</i>&nbsp;import org.hibernate.validator.constraints.NotEmpty;
-<i>4</i>&nbsp;import org.springframework.boot.SpringApplication;
-<i>5</i>&nbsp;import org.springframework.boot.autoconfigure.SpringBootApplication;
-<i>6</i>&nbsp;import org.springframework.context.annotation.Bean;
-<i>7</i>&nbsp;import org.springframework.data.annotation.CreatedDate;
-<i>8</i>&nbsp;import org.springframework.data.annotation.Id;
-<i>9</i>&nbsp;import org.springframework.data.annotation.LastModifiedDate;
-<i>10</i>&nbsp;import org.springframework.data.mongodb.config.EnableMongoAuditing;
-<i>11</i>&nbsp;import org.springframework.data.mongodb.core.mapping.DBRef;
-<i>12</i>&nbsp;import org.springframework.data.mongodb.core.mapping.Document;
-<i>13</i>&nbsp;import org.springframework.data.mongodb.core.mapping.event.ValidatingMongoEventListener;
-<i>14</i>&nbsp;import org.springframework.data.repository.CrudRepository;
-<i>15</i>&nbsp;import org.springframework.data.rest.core.annotation.RepositoryRestResource;
-<i>16</i>&nbsp;import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
-<i>17</i>&nbsp;
-<i>18</i>&nbsp;import javax.validation.constraints.NotNull;
-<i>19</i>&nbsp;import java.util.ArrayList;
-<i>20</i>&nbsp;import java.util.Date;
-<i>21</i>&nbsp;import java.util.List;
-<i>22</i>&nbsp;
-<i>23</i>&nbsp;@SpringBootApplication
-<i>24</i>&nbsp;@EnableMongoAuditing
-<i>25</i>&nbsp;public class MongodbExampleApplication {
-<i>26</i>&nbsp;
-<i>27</i>&nbsp;    public static void main(String[] args) {
-<i>28</i>&nbsp;        SpringApplication.run(MongodbExampleApplication.class, args);
-<i>29</i>&nbsp;    }
-<i>30</i>&nbsp;
-<i>31</i>&nbsp;    @Bean
-<i>32</i>&nbsp;    public ValidatingMongoEventListener validatingMongoEventListener() {
-<i>33</i>&nbsp;        return new ValidatingMongoEventListener(validator());
-<i>34</i>&nbsp;    }
-<i>35</i>&nbsp;
-<i>36</i>&nbsp;    @Bean
-<i>37</i>&nbsp;    public LocalValidatorFactoryBean validator() {
-<i>38</i>&nbsp;        return new LocalValidatorFactoryBean();
-<i>39</i>&nbsp;    }
-<i>40</i>&nbsp;}
-<i>41</i>&nbsp;
-<i>42</i>&nbsp;// ok use mongo db
-<i>43</i>&nbsp;// ok use data rest
-<i>44</i>&nbsp;// ok auditable entity
-<i>45</i>&nbsp;// ok use validations
-<i>46</i>&nbsp;// ok use profile to test embedded mongodb
-<i>47</i>&nbsp;// TODO use relation by reference
-<i>48</i>&nbsp;// TODO ...
-<i>49</i>&nbsp;// TODO make service on mongodb atlas o firebase
-<i>50</i>&nbsp;
-<i>51</i>&nbsp;@RepositoryRestResource
-<i>52</i>&nbsp;interface AddressRepository extends CrudRepository&lt;Address, String&gt; {
-<i>53</i>&nbsp;}
+<i>4</i>&nbsp;import org.springframework.beans.factory.annotation.Autowired;
+<i>5</i>&nbsp;import org.springframework.boot.CommandLineRunner;
+<i>6</i>&nbsp;import org.springframework.boot.SpringApplication;
+<i>7</i>&nbsp;import org.springframework.boot.autoconfigure.SpringBootApplication;
+<i>8</i>&nbsp;import org.springframework.context.annotation.Bean;
+<i>9</i>&nbsp;import org.springframework.data.annotation.CreatedDate;
+<i>10</i>&nbsp;import org.springframework.data.annotation.Id;
+<i>11</i>&nbsp;import org.springframework.data.annotation.LastModifiedDate;
+<i>12</i>&nbsp;import org.springframework.data.mongodb.config.EnableMongoAuditing;
+<i>13</i>&nbsp;import org.springframework.data.mongodb.core.mapping.DBRef;
+<i>14</i>&nbsp;import org.springframework.data.mongodb.core.mapping.Document;
+<i>15</i>&nbsp;import org.springframework.data.mongodb.core.mapping.event.ValidatingMongoEventListener;
+<i>16</i>&nbsp;import org.springframework.data.repository.CrudRepository;
+<i>17</i>&nbsp;import org.springframework.data.rest.core.annotation.RepositoryRestResource;
+<i>18</i>&nbsp;import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;import javax.validation.constraints.NotNull;
+<i>21</i>&nbsp;import java.util.ArrayList;
+<i>22</i>&nbsp;import java.util.Date;
+<i>23</i>&nbsp;import java.util.List;
+<i>24</i>&nbsp;
+<i>25</i>&nbsp;@SpringBootApplication
+<i>26</i>&nbsp;@EnableMongoAuditing
+<i>27</i>&nbsp;public class MongodbExampleApplication {
+<i>28</i>&nbsp;
+<i>29</i>&nbsp;    public static void main(String[] args) {
+<i>30</i>&nbsp;        SpringApplication.run(MongodbExampleApplication.class, args);
+<i>31</i>&nbsp;    }
+<i>32</i>&nbsp;
+<i>33</i>&nbsp;    @Bean
+<i>34</i>&nbsp;    public ValidatingMongoEventListener validatingMongoEventListener() {
+<i>35</i>&nbsp;        return new ValidatingMongoEventListener(validator());
+<i>36</i>&nbsp;    }
+<i>37</i>&nbsp;
+<i>38</i>&nbsp;    @Bean
+<i>39</i>&nbsp;    public LocalValidatorFactoryBean validator() {
+<i>40</i>&nbsp;        return new LocalValidatorFactoryBean();
+<i>41</i>&nbsp;    }
+<i>42</i>&nbsp;
+<i>43</i>&nbsp;    @Autowired
+<i>44</i>&nbsp;    private CustomerRepository customerRepository;
+<i>45</i>&nbsp;
+<i>46</i>&nbsp;    @Autowired
+<i>47</i>&nbsp;    private AddressRepository addressRepository;
+<i>48</i>&nbsp;
+<i>49</i>&nbsp;    @Bean
+<i>50</i>&nbsp;    public CommandLineRunner runner() {
+<i>51</i>&nbsp;        return args -&gt; {
+<i>52</i>&nbsp;            Address address = new Address(1, &quot;5th avenue&quot;, &quot;new york&quot;, &quot;ny&quot;);
+<i>53</i>&nbsp;            Address createdAddress = addressRepository.save(address);
 <i>54</i>&nbsp;
-<i>55</i>&nbsp;@RepositoryRestResource
-<i>56</i>&nbsp;interface CustomerRepository extends CrudRepository&lt;Customer, String&gt; {
-<i>57</i>&nbsp;}
-<i>58</i>&nbsp;
-<i>59</i>&nbsp;@Document
-<i>60</i>&nbsp;class Address {
+<i>55</i>&nbsp;            Customer customer = new Customer(&quot;john&quot;, &quot;doe&quot;);
+<i>56</i>&nbsp;            customer.getAddresses().add(createdAddress);
+<i>57</i>&nbsp;            Customer createdCustomer = customerRepository.save(customer);
+<i>58</i>&nbsp;        };
+<i>59</i>&nbsp;    }
+<i>60</i>&nbsp;}
 <i>61</i>&nbsp;
-<i>62</i>&nbsp;    @Id
-<i>63</i>&nbsp;    private String _id;
-<i>64</i>&nbsp;
-<i>65</i>&nbsp;    @NotNull
-<i>66</i>&nbsp;    private Integer number;
-<i>67</i>&nbsp;
-<i>68</i>&nbsp;    @NotEmpty
-<i>69</i>&nbsp;    private String street;
+<i>62</i>&nbsp;// ok use mongo db
+<i>63</i>&nbsp;// ok use data rest
+<i>64</i>&nbsp;// ok use auditable entity
+<i>65</i>&nbsp;// ok use validations
+<i>66</i>&nbsp;// ok use profile to test embedded mongodb
+<i>67</i>&nbsp;// ok use relational by reference
+<i>68</i>&nbsp;// TODO use service on mongodb atlas or firebase
+<i>69</i>&nbsp;// TODO ...
 <i>70</i>&nbsp;
-<i>71</i>&nbsp;    @NotEmpty
-<i>72</i>&nbsp;    private String city;
-<i>73</i>&nbsp;
-<i>74</i>&nbsp;    @NotEmpty
-<i>75</i>&nbsp;    private String state;
-<i>76</i>&nbsp;
-<i>77</i>&nbsp;    @CreatedDate
-<i>78</i>&nbsp;    private Date created;
-<i>79</i>&nbsp;
-<i>80</i>&nbsp;    @LastModifiedDate
-<i>81</i>&nbsp;    private Date modifyed;
-<i>82</i>&nbsp;
-<i>83</i>&nbsp;    @DBRef
-<i>84</i>&nbsp;    private Customer customer;
-<i>85</i>&nbsp;
-<i>86</i>&nbsp;    public Address() {
-<i>87</i>&nbsp;    }
-<i>88</i>&nbsp;
-<i>89</i>&nbsp;    public Address(Integer number, String street, String city, String state) {
-<i>90</i>&nbsp;        this.number = number;
-<i>91</i>&nbsp;        this.street = street;
-<i>92</i>&nbsp;        this.city = city;
-<i>93</i>&nbsp;        this.state = state;
-<i>94</i>&nbsp;    }
-<i>95</i>&nbsp;
-<i>96</i>&nbsp;    public String getId() {
-<i>97</i>&nbsp;        return _id;
-<i>98</i>&nbsp;    }
+<i>71</i>&nbsp;@RepositoryRestResource
+<i>72</i>&nbsp;interface AddressRepository extends CrudRepository&lt;Address, String&gt; {
+<i>73</i>&nbsp;}
+<i>74</i>&nbsp;
+<i>75</i>&nbsp;@RepositoryRestResource
+<i>76</i>&nbsp;interface CustomerRepository extends CrudRepository&lt;Customer, String&gt; {
+<i>77</i>&nbsp;}
+<i>78</i>&nbsp;
+<i>79</i>&nbsp;@Document
+<i>80</i>&nbsp;class Address {
+<i>81</i>&nbsp;
+<i>82</i>&nbsp;    @Id
+<i>83</i>&nbsp;    private String _id;
+<i>84</i>&nbsp;
+<i>85</i>&nbsp;    @NotNull
+<i>86</i>&nbsp;    private Integer number;
+<i>87</i>&nbsp;
+<i>88</i>&nbsp;    @NotEmpty
+<i>89</i>&nbsp;    private String street;
+<i>90</i>&nbsp;
+<i>91</i>&nbsp;    @NotEmpty
+<i>92</i>&nbsp;    private String city;
+<i>93</i>&nbsp;
+<i>94</i>&nbsp;    @NotEmpty
+<i>95</i>&nbsp;    private String state;
+<i>96</i>&nbsp;
+<i>97</i>&nbsp;    @CreatedDate
+<i>98</i>&nbsp;    private Date created;
 <i>99</i>&nbsp;
-<i>100</i>&nbsp;    public void setId(String _id) {
-<i>101</i>&nbsp;        this._id = _id;
-<i>102</i>&nbsp;    }
-<i>103</i>&nbsp;
-<i>104</i>&nbsp;    public Integer getNumber() {
-<i>105</i>&nbsp;        return number;
-<i>106</i>&nbsp;    }
-<i>107</i>&nbsp;
-<i>108</i>&nbsp;    public void setNumber(Integer number) {
-<i>109</i>&nbsp;        this.number = number;
-<i>110</i>&nbsp;    }
-<i>111</i>&nbsp;
-<i>112</i>&nbsp;    public String getStreet() {
-<i>113</i>&nbsp;        return street;
+<i>100</i>&nbsp;    @LastModifiedDate
+<i>101</i>&nbsp;    private Date modifyed;
+<i>102</i>&nbsp;
+<i>103</i>&nbsp;    @DBRef
+<i>104</i>&nbsp;    private Customer customer;
+<i>105</i>&nbsp;
+<i>106</i>&nbsp;    public Address() {
+<i>107</i>&nbsp;    }
+<i>108</i>&nbsp;
+<i>109</i>&nbsp;    public Address(Integer number, String street, String city, String state) {
+<i>110</i>&nbsp;        this.number = number;
+<i>111</i>&nbsp;        this.street = street;
+<i>112</i>&nbsp;        this.city = city;
+<i>113</i>&nbsp;        this.state = state;
 <i>114</i>&nbsp;    }
 <i>115</i>&nbsp;
-<i>116</i>&nbsp;    public void setStreet(String street) {
-<i>117</i>&nbsp;        this.street = street;
+<i>116</i>&nbsp;    public String getId() {
+<i>117</i>&nbsp;        return _id;
 <i>118</i>&nbsp;    }
 <i>119</i>&nbsp;
-<i>120</i>&nbsp;    public String getCity() {
-<i>121</i>&nbsp;        return city;
+<i>120</i>&nbsp;    public void setId(String _id) {
+<i>121</i>&nbsp;        this._id = _id;
 <i>122</i>&nbsp;    }
 <i>123</i>&nbsp;
-<i>124</i>&nbsp;    public void setCity(String city) {
-<i>125</i>&nbsp;        this.city = city;
+<i>124</i>&nbsp;    public Integer getNumber() {
+<i>125</i>&nbsp;        return number;
 <i>126</i>&nbsp;    }
 <i>127</i>&nbsp;
-<i>128</i>&nbsp;    public String getState() {
-<i>129</i>&nbsp;        return state;
+<i>128</i>&nbsp;    public void setNumber(Integer number) {
+<i>129</i>&nbsp;        this.number = number;
 <i>130</i>&nbsp;    }
 <i>131</i>&nbsp;
-<i>132</i>&nbsp;    public void setState(String state) {
-<i>133</i>&nbsp;        this.state = state;
+<i>132</i>&nbsp;    public String getStreet() {
+<i>133</i>&nbsp;        return street;
 <i>134</i>&nbsp;    }
 <i>135</i>&nbsp;
-<i>136</i>&nbsp;    public Date getCreated() {
-<i>137</i>&nbsp;        return created;
+<i>136</i>&nbsp;    public void setStreet(String street) {
+<i>137</i>&nbsp;        this.street = street;
 <i>138</i>&nbsp;    }
 <i>139</i>&nbsp;
-<i>140</i>&nbsp;    public void setCreated(Date created) {
-<i>141</i>&nbsp;        this.created = created;
+<i>140</i>&nbsp;    public String getCity() {
+<i>141</i>&nbsp;        return city;
 <i>142</i>&nbsp;    }
 <i>143</i>&nbsp;
-<i>144</i>&nbsp;    public Date getModifyed() {
-<i>145</i>&nbsp;        return modifyed;
+<i>144</i>&nbsp;    public void setCity(String city) {
+<i>145</i>&nbsp;        this.city = city;
 <i>146</i>&nbsp;    }
 <i>147</i>&nbsp;
-<i>148</i>&nbsp;    public void setModifyed(Date modifyed) {
-<i>149</i>&nbsp;        this.modifyed = modifyed;
+<i>148</i>&nbsp;    public String getState() {
+<i>149</i>&nbsp;        return state;
 <i>150</i>&nbsp;    }
 <i>151</i>&nbsp;
-<i>152</i>&nbsp;    public Customer getCustomer() {
-<i>153</i>&nbsp;        return customer;
+<i>152</i>&nbsp;    public void setState(String state) {
+<i>153</i>&nbsp;        this.state = state;
 <i>154</i>&nbsp;    }
 <i>155</i>&nbsp;
-<i>156</i>&nbsp;    public void setCustomer(Customer customer) {
-<i>157</i>&nbsp;        this.customer = customer;
+<i>156</i>&nbsp;    public Date getCreated() {
+<i>157</i>&nbsp;        return created;
 <i>158</i>&nbsp;    }
 <i>159</i>&nbsp;
-<i>160</i>&nbsp;    @Override
-<i>161</i>&nbsp;    public String toString() {
-<i>162</i>&nbsp;        return &quot;Address{&quot; +
-<i>163</i>&nbsp;                &quot;_id=&#39;&quot; + _id + &#39;\&#39;&#39; +
-<i>164</i>&nbsp;                &quot;, number=&quot; + number +
-<i>165</i>&nbsp;                &quot;, street=&#39;&quot; + street + &#39;\&#39;&#39; +
-<i>166</i>&nbsp;                &quot;, city=&#39;&quot; + city + &#39;\&#39;&#39; +
-<i>167</i>&nbsp;                &quot;, state=&#39;&quot; + state + &#39;\&#39;&#39; +
-<i>168</i>&nbsp;                &quot;, created=&quot; + created +
-<i>169</i>&nbsp;                &quot;, modifyed=&quot; + modifyed +
-<i>170</i>&nbsp;                &quot;, customer=&quot; + customer +
-<i>171</i>&nbsp;                &#39;}&#39;;
-<i>172</i>&nbsp;    }
-<i>173</i>&nbsp;}
-<i>174</i>&nbsp;
-<i>175</i>&nbsp;@Document
-<i>176</i>&nbsp;class Customer {
-<i>177</i>&nbsp;
-<i>178</i>&nbsp;    @Id
-<i>179</i>&nbsp;    private String _id;
-<i>180</i>&nbsp;
-<i>181</i>&nbsp;    @NotEmpty
-<i>182</i>&nbsp;    private String firstname;
-<i>183</i>&nbsp;
-<i>184</i>&nbsp;    @NotEmpty
-<i>185</i>&nbsp;    private String lastname;
-<i>186</i>&nbsp;
-<i>187</i>&nbsp;    @CreatedDate
-<i>188</i>&nbsp;    private Date created;
-<i>189</i>&nbsp;
-<i>190</i>&nbsp;    @LastModifiedDate
-<i>191</i>&nbsp;    private Date modifyed;
-<i>192</i>&nbsp;
-<i>193</i>&nbsp;    @DBRef
-<i>194</i>&nbsp;    private List&lt;Address&gt; addresses = new ArrayList&lt;&gt;();
-<i>195</i>&nbsp;
-<i>196</i>&nbsp;    public Customer() {
-<i>197</i>&nbsp;    }
-<i>198</i>&nbsp;
-<i>199</i>&nbsp;    public Customer(String firstname, String lastname) {
-<i>200</i>&nbsp;        this.firstname = firstname;
-<i>201</i>&nbsp;        this.lastname = lastname;
-<i>202</i>&nbsp;    }
+<i>160</i>&nbsp;    public void setCreated(Date created) {
+<i>161</i>&nbsp;        this.created = created;
+<i>162</i>&nbsp;    }
+<i>163</i>&nbsp;
+<i>164</i>&nbsp;    public Date getModifyed() {
+<i>165</i>&nbsp;        return modifyed;
+<i>166</i>&nbsp;    }
+<i>167</i>&nbsp;
+<i>168</i>&nbsp;    public void setModifyed(Date modifyed) {
+<i>169</i>&nbsp;        this.modifyed = modifyed;
+<i>170</i>&nbsp;    }
+<i>171</i>&nbsp;
+<i>172</i>&nbsp;    public Customer getCustomer() {
+<i>173</i>&nbsp;        return customer;
+<i>174</i>&nbsp;    }
+<i>175</i>&nbsp;
+<i>176</i>&nbsp;    public void setCustomer(Customer customer) {
+<i>177</i>&nbsp;        this.customer = customer;
+<i>178</i>&nbsp;    }
+<i>179</i>&nbsp;
+<i>180</i>&nbsp;    @Override
+<i>181</i>&nbsp;    public String toString() {
+<i>182</i>&nbsp;        return &quot;Address{&quot; +
+<i>183</i>&nbsp;                &quot;_id=&#39;&quot; + _id + &#39;\&#39;&#39; +
+<i>184</i>&nbsp;                &quot;, number=&quot; + number +
+<i>185</i>&nbsp;                &quot;, street=&#39;&quot; + street + &#39;\&#39;&#39; +
+<i>186</i>&nbsp;                &quot;, city=&#39;&quot; + city + &#39;\&#39;&#39; +
+<i>187</i>&nbsp;                &quot;, state=&#39;&quot; + state + &#39;\&#39;&#39; +
+<i>188</i>&nbsp;                &quot;, created=&quot; + created +
+<i>189</i>&nbsp;                &quot;, modifyed=&quot; + modifyed +
+<i>190</i>&nbsp;                &quot;, customer=&quot; + customer +
+<i>191</i>&nbsp;                &#39;}&#39;;
+<i>192</i>&nbsp;    }
+<i>193</i>&nbsp;}
+<i>194</i>&nbsp;
+<i>195</i>&nbsp;@Document
+<i>196</i>&nbsp;class Customer {
+<i>197</i>&nbsp;
+<i>198</i>&nbsp;    @Id
+<i>199</i>&nbsp;    private String _id;
+<i>200</i>&nbsp;
+<i>201</i>&nbsp;    @NotEmpty
+<i>202</i>&nbsp;    private String firstname;
 <i>203</i>&nbsp;
-<i>204</i>&nbsp;    public String getId() {
-<i>205</i>&nbsp;        return _id;
-<i>206</i>&nbsp;    }
-<i>207</i>&nbsp;
-<i>208</i>&nbsp;    public void setId(String _id) {
-<i>209</i>&nbsp;        this._id = _id;
-<i>210</i>&nbsp;    }
-<i>211</i>&nbsp;
-<i>212</i>&nbsp;    public String getFirstname() {
-<i>213</i>&nbsp;        return firstname;
-<i>214</i>&nbsp;    }
+<i>204</i>&nbsp;    @NotEmpty
+<i>205</i>&nbsp;    private String lastname;
+<i>206</i>&nbsp;
+<i>207</i>&nbsp;    @CreatedDate
+<i>208</i>&nbsp;    private Date created;
+<i>209</i>&nbsp;
+<i>210</i>&nbsp;    @LastModifiedDate
+<i>211</i>&nbsp;    private Date modifyed;
+<i>212</i>&nbsp;
+<i>213</i>&nbsp;    @DBRef
+<i>214</i>&nbsp;    private List&lt;Address&gt; addresses = new ArrayList&lt;&gt;();
 <i>215</i>&nbsp;
-<i>216</i>&nbsp;    public void setFirstname(String firstname) {
-<i>217</i>&nbsp;        this.firstname = firstname;
-<i>218</i>&nbsp;    }
-<i>219</i>&nbsp;
-<i>220</i>&nbsp;    public String getLastname() {
-<i>221</i>&nbsp;        return lastname;
+<i>216</i>&nbsp;    public Customer() {
+<i>217</i>&nbsp;    }
+<i>218</i>&nbsp;
+<i>219</i>&nbsp;    public Customer(String firstname, String lastname) {
+<i>220</i>&nbsp;        this.firstname = firstname;
+<i>221</i>&nbsp;        this.lastname = lastname;
 <i>222</i>&nbsp;    }
 <i>223</i>&nbsp;
-<i>224</i>&nbsp;    public void setLastname(String lastname) {
-<i>225</i>&nbsp;        this.lastname = lastname;
+<i>224</i>&nbsp;    public String getId() {
+<i>225</i>&nbsp;        return _id;
 <i>226</i>&nbsp;    }
 <i>227</i>&nbsp;
-<i>228</i>&nbsp;    public Date getCreated() {
-<i>229</i>&nbsp;        return created;
+<i>228</i>&nbsp;    public void setId(String _id) {
+<i>229</i>&nbsp;        this._id = _id;
 <i>230</i>&nbsp;    }
 <i>231</i>&nbsp;
-<i>232</i>&nbsp;    public void setCreated(Date created) {
-<i>233</i>&nbsp;        this.created = created;
+<i>232</i>&nbsp;    public String getFirstname() {
+<i>233</i>&nbsp;        return firstname;
 <i>234</i>&nbsp;    }
 <i>235</i>&nbsp;
-<i>236</i>&nbsp;    public Date getModifyed() {
-<i>237</i>&nbsp;        return modifyed;
+<i>236</i>&nbsp;    public void setFirstname(String firstname) {
+<i>237</i>&nbsp;        this.firstname = firstname;
 <i>238</i>&nbsp;    }
 <i>239</i>&nbsp;
-<i>240</i>&nbsp;    public void setModifyed(Date modifyed) {
-<i>241</i>&nbsp;        this.modifyed = modifyed;
+<i>240</i>&nbsp;    public String getLastname() {
+<i>241</i>&nbsp;        return lastname;
 <i>242</i>&nbsp;    }
 <i>243</i>&nbsp;
-<i>244</i>&nbsp;    public List&lt;Address&gt; getAddresses() {
-<i>245</i>&nbsp;        return addresses;
+<i>244</i>&nbsp;    public void setLastname(String lastname) {
+<i>245</i>&nbsp;        this.lastname = lastname;
 <i>246</i>&nbsp;    }
 <i>247</i>&nbsp;
-<i>248</i>&nbsp;    public void setAddresses(List&lt;Address&gt; addresses) {
-<i>249</i>&nbsp;        this.addresses = addresses;
+<i>248</i>&nbsp;    public Date getCreated() {
+<i>249</i>&nbsp;        return created;
 <i>250</i>&nbsp;    }
 <i>251</i>&nbsp;
-<i>252</i>&nbsp;    @Override
-<i>253</i>&nbsp;    public String toString() {
-<i>254</i>&nbsp;        return &quot;Customer{&quot; +
-<i>255</i>&nbsp;                &quot;_id=&#39;&quot; + _id + &#39;\&#39;&#39; +
-<i>256</i>&nbsp;                &quot;, firstname=&#39;&quot; + firstname + &#39;\&#39;&#39; +
-<i>257</i>&nbsp;                &quot;, lastname=&#39;&quot; + lastname + &#39;\&#39;&#39; +
-<i>258</i>&nbsp;                &quot;, created=&quot; + created +
-<i>259</i>&nbsp;                &quot;, modifyed=&quot; + modifyed +
-<i>260</i>&nbsp;                &quot;, addresses=&quot; + addresses +
-<i>261</i>&nbsp;                &#39;}&#39;;
+<i>252</i>&nbsp;    public void setCreated(Date created) {
+<i>253</i>&nbsp;        this.created = created;
+<i>254</i>&nbsp;    }
+<i>255</i>&nbsp;
+<i>256</i>&nbsp;    public Date getModifyed() {
+<i>257</i>&nbsp;        return modifyed;
+<i>258</i>&nbsp;    }
+<i>259</i>&nbsp;
+<i>260</i>&nbsp;    public void setModifyed(Date modifyed) {
+<i>261</i>&nbsp;        this.modifyed = modifyed;
 <i>262</i>&nbsp;    }
-<i>263</i>&nbsp;}
+<i>263</i>&nbsp;
+<i>264</i>&nbsp;    public List&lt;Address&gt; getAddresses() {
+<i>265</i>&nbsp;        return addresses;
+<i>266</i>&nbsp;    }
+<i>267</i>&nbsp;
+<i>268</i>&nbsp;    public void setAddresses(List&lt;Address&gt; addresses) {
+<i>269</i>&nbsp;        this.addresses = addresses;
+<i>270</i>&nbsp;    }
+<i>271</i>&nbsp;
+<i>272</i>&nbsp;    @Override
+<i>273</i>&nbsp;    public String toString() {
+<i>274</i>&nbsp;        return &quot;Customer{&quot; +
+<i>275</i>&nbsp;                &quot;_id=&#39;&quot; + _id + &#39;\&#39;&#39; +
+<i>276</i>&nbsp;                &quot;, firstname=&#39;&quot; + firstname + &#39;\&#39;&#39; +
+<i>277</i>&nbsp;                &quot;, lastname=&#39;&quot; + lastname + &#39;\&#39;&#39; +
+<i>278</i>&nbsp;                &quot;, created=&quot; + created +
+<i>279</i>&nbsp;                &quot;, modifyed=&quot; + modifyed +
+<i>280</i>&nbsp;                &quot;, addresses=&quot; + addresses +
+<i>281</i>&nbsp;                &#39;}&#39;;
+<i>282</i>&nbsp;    }
+<i>283</i>&nbsp;}
 </div>
 </div>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2018-01-07 20:14</div>
+    <div style="float:right;">generated on 2018-01-07 20:50</div>
 </div>
 </body>
 </html>
