@@ -20,20 +20,20 @@ public class Application {
         SpringApplication.run(Application.class, args);
     }
 
-    @Bean
-    CommandLineRunner runner() {
-        return args -> {
-
-            System.out.println("running application...");
-
-            customerRepository.deleteAll();
-
-            customerRepository.save(new Customer("Francisco", "Melo"));
-            customerRepository.save(new Customer("Laura", "Mendes"));
-            customerRepository.save(new Customer("John", "Mc Lann"));
-            customerRepository.save(new Customer("Samuel", "jackson"));
-
-            customerRepository.findAll().stream().forEach(System.out::println);
-        };
-    }
+//    @Bean
+//    CommandLineRunner runner() {
+//        return args -> {
+//
+//            System.out.println("running application...");
+//
+//            customerRepository.deleteAll();
+//
+//            customerRepository.save(new Customer("Francisco", "Melo"));
+//            customerRepository.save(new Customer("Laura", "Mendes"));
+//            customerRepository.save(new Customer("John", "Mc Lann"));
+//            customerRepository.save(new Customer("Samuel", "jackson"));
+//
+//            customerRepository.findAll().stream().forEach(System.out::println);
+//        };
+//    }
 }
